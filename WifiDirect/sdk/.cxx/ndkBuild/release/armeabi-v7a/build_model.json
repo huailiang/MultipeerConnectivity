@@ -1,0 +1,60 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/Users/penghuailiang/Documents/unity/WifiDirect",
+      "sdkFolder": "/Users/penghuailiang/Documents/software/eclipse/android-sdks",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates",
+      "gradleModulePathName": ":sdk",
+      "moduleRootFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk",
+      "makeFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Android.mk",
+      "buildSystem": "NDK_BUILD",
+      "compilerSettingsCacheFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/.cxx",
+      "cxxFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx",
+      "ndkFolder": "/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944",
+      "ndkVersion": "20.1.5948944",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [],
+    "cppFlagsList": [],
+    "variantName": "release",
+    "soFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/release/lib",
+    "objFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/release/obj/local",
+    "jsonFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release",
+    "gradleBuildOutputFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/cxx/release",
+    "isDebuggableEnabled": false,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "ARMEABI_V7A",
+  "abiPlatformVersion": 16,
+  "cxxBuildFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a",
+  "jsonFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/cxx/release/armeabi-v7a",
+  "objFolder": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a",
+  "buildCommandFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/build_command.txt",
+  "buildOutputFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/build_output.txt",
+  "modelOutputFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/build_model.json",
+  "jsonGenerationLoggingRecordFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/json_generation_record.json",
+  "compileCommandsJsonFile": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/.cxx/ndkBuild/release/armeabi-v7a/compile_commands.json"
+}

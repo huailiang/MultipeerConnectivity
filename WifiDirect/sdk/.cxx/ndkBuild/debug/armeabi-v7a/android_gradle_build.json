@@ -1,0 +1,34 @@
+{
+  "buildFiles": [
+    "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Android.mk",
+    "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Application.mk"
+  ],
+  "cleanCommands": [
+    "/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/lib clean"
+  ],
+  "buildTargetsCommand": "/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/lib {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "Utility-debug-armeabi-v7a": {
+      "buildCommand": "/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/lib /Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libUtility.so",
+      "toolchain": "toolchain-armeabi-v7a",
+      "abi": "armeabi-v7a",
+      "artifactName": "Utility",
+      "files": [
+        {
+          "src": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/NativeHelpher.cpp",
+          "flags": "-target armv7-none-linux-androideabi16 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot /Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -fno-addrsig -fno-exceptions -fno-rtti -fpic -march\u003darmv7-a -mthumb -O0 -UNDEBUG -fno-limit-debug-info -I/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni/ -I/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/sources/cxx-stl/llvm-libc++/include -I/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/sources/cxx-stl/llvm-libc++abi/include -I/Users/penghuailiang/Documents/unity/WifiDirect/sdk/src/main/jni -std\u003dc++11 -std\u003dc++17 -fexceptions -O2 -g -DANDROID -nostdinc++ -Wa,--noexecstack -Wformat -Werror\u003dformat-security -fexceptions -fexceptions"
+        }
+      ],
+      "output": "/Users/penghuailiang/Documents/unity/WifiDirect/sdk/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libUtility.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-armeabi-v7a": {
+      "cppCompilerExecutable": "/Users/penghuailiang/Documents/software/eclipse/android-sdks/ndk/20.1.5948944/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

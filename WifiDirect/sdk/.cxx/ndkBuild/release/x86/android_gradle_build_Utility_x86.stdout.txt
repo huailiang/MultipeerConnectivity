@@ -1,0 +1,2 @@
+[x86] Compile++      : Utility <= NativeHelpher.cpp
+[x86] SharedLibrary  : libUtility.so

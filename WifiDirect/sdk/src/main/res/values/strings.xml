@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">opsdk</string>
+    <string name="com_sina_weibo_sdk_login">登录</string>
+    <string name="com_sina_weibo_sdk_logout">注销</string>
+    <string name="Ensure">"确定"</string>
+    <string name="Cancel">"取消"</string>
+</resources>

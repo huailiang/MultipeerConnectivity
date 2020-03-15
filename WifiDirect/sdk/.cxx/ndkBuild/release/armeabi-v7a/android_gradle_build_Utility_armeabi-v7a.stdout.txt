@@ -1,0 +1,2 @@
+[armeabi-v7a] Compile++ thumb: Utility <= NativeHelpher.cpp
+[armeabi-v7a] SharedLibrary  : libUtility.so

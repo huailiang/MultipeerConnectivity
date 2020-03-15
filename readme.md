@@ -15,7 +15,7 @@
 
 ## Android
 
-	主要是对Wi-Fi Direct的封装(暂未实现), 需要在AndroidMenifest.xml添加如下权限：
+	主要是对Wi-Fi Direct的封装, 需要在AndroidMenifest.xml添加如下权限：
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>

@@ -1,0 +1,2 @@
+[arm64-v8a] Compile++      : Utility <= NativeHelpher.cpp
+[arm64-v8a] SharedLibrary  : libUtility.so
