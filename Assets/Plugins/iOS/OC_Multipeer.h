@@ -11,13 +11,20 @@
 
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-#import <Foundation/Foundation.h>
+
+typedef void (*NewRoleJoin) (const char *name);
+
+typedef void (*RecvMessage)(const char* msg);
+
+typedef void (*OnCharQuit)(const char* name);
 
 @interface OC_Multipeer : NSObject
 
 - (void)createMC:(NSString *)name withType:(NSString*)type;
 
 - (void)sendMsg:(NSString *)msg withMode:(MCSessionSendDataMode)mode;
+
+- (void)quit;
 
 @end
 

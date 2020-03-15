@@ -9,13 +9,21 @@ extern "C"{
 
 #include "OC_Multipeer.h"
 
-typedef void (*NewRoleJoin) (const char *object);
+
 
 OC_Multipeer *peer;
 
-extern void InitWith(char* name, char* type);
+extern NewRoleJoin roleJoinHandler;
+
+extern RecvMessage recvMessageHandler;
+
+extern OnCharQuit charQuitHandler;
+
+extern void InitWith(char* name, char* type, NewRoleJoin roleHandler, RecvMessage recvHandler, OnCharQuit quitHandler);
 
 extern void Broadcast(char* msg);
+
+extern void QuitConnect();
 
 
 #ifdef __cplusplus

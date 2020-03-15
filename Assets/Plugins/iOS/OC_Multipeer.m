@@ -7,6 +7,10 @@
 
 #import "OC_Multipeer.h"
 
+NewRoleJoin roleJoinHandler;
+RecvMessage recvMessageHandler;
+OnCharQuit charQuitHandler;
+
 #pragma mark oc interface
 
 @interface OC_Multipeer
@@ -36,10 +40,6 @@
  *  存储连接
  */
 @property (nonatomic,strong)NSMutableArray * sessionArray;
-/**
- *  数据源
- */
-@property (nonatomic,strong)NSMutableArray * dataArray;
 
 /**
  * 连接类型
@@ -78,7 +78,22 @@
 
 - (void)sendMsg:(NSString *)msg withMode:(MCSessionSendDataMode)mode
 {
-     [_session sendData:[msg dataUsingEncoding:NSUTF8StringEncoding] toPeers:_session.connectedPeers withMode:MCSessionSendDataUnreliable error:nil];
+     [_session sendData:[msg dataUsingEncoding:NSUTF8StringEncoding] toPeers:_session.connectedPeers withMode:mode error:nil];
+}
+
+-(void)quit
+{
+    if (_session!=nil) {
+        [_session disconnect];
+        _session = nil;
+    }
+    if (_brower!=nil) {
+        [_brower stopBrowsingForPeers];
+        _brower=nil;
+    }
+    if (_sessionArray !=nil) {
+        [_sessionArray removeAllObjects];
+    }
 }
 
 /**
@@ -90,13 +105,13 @@
  */
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     NSLog(@"发现附近用户%@",peerID.displayName);
+    roleJoinHandler([peerID.displayName UTF8String]);
     if (_browserViewController == nil) {
         _browserViewController = [[MCBrowserViewController alloc]initWithServiceType:_connectType session:_session];
         _browserViewController.delegate = self;
         /**
          *  跳转发现界面
          */
-//        [self presentViewController:_browserViewController animated:YES completion:nil];
         [UnityGetGLViewController() presentViewController:_browserViewController animated:YES completion:nil];
     }
 }
@@ -108,6 +123,8 @@
  */
 - (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID{
     NSLog(@"附近用户%@离开了",peerID.displayName);
+    const char* name = [peerID.displayName UTF8String];
+    charQuitHandler(name);
 }
 
 
@@ -163,8 +180,9 @@
 - (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     NSString * message = [NSString stringWithFormat:@"%@:%@",peerID.displayName,[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_dataArray addObject:message];
         NSLog(@"recv: %@", message);
+        const char* msg = [message UTF8String];
+        recvMessageHandler(msg);
     });
 }
 /**

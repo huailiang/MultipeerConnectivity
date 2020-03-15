@@ -6,6 +6,7 @@
 #pragma mark c implements
 
 
+
 bool check_error()
 {
     if (peer== nil || peer == NULL) {
@@ -15,9 +16,14 @@ bool check_error()
     return true;
 }
 
-void InitWith(char* name, char* type)
+void InitWith(char* name, char* type, NewRoleJoin roleHandler, RecvMessage recvHandler, OnCharQuit quitHandler)
 {
     printf("%s. type: %s",name, type);
+    
+    roleJoinHandler = roleHandler;
+    recvMessageHandler = recvHandler;
+    charQuitHandler = quitHandler;
+    
     NSString* n_name = [[NSString alloc] initWithUTF8String:name];
     NSString* n_type = [[NSString alloc] initWithUTF8String:type];
     NSLog(@"name %@, type: %@", n_name, n_type);
@@ -36,3 +42,11 @@ void Broadcast(char* msg)
     }
 }
 
+
+void QuitConnect()
+{
+    if (check_error()) {
+        printf("quit connect");
+        [peer quit];
+    }
+}
