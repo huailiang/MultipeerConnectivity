@@ -1,44 +1,46 @@
 package com.sdk;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
-public class WiFiDirect extends BroadcastReceiver implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener
+public class WiFiDirect implements WifiP2pManager.ChannelListener
 {
-    private static Activity gameActivity = null;
+    public static volatile String PeerAddress = null;
+    public final static String TAG = "WiFiDirect";
+    public static Activity GameActivity = null;
     private static Context gameContext = null;
-    private final static String TAG = "WiFiDirect";
+
+    final int CLIENT_PORT = 8900;
+    final int SERVER_PORT = 8800;
 
     private WifiP2pManager mManager;
     private final IntentFilter intentFilter = new IntentFilter();
     private Channel mChannel;
+    private WifiDirectReceiver mReceiver;
+    private ArrayList<WifiP2pDevice> peers = new ArrayList();
 
-    private List<WifiP2pDevice> peers = new ArrayList();
-    private List<String> peersStr = new ArrayList<>();
-
+    private Thread mServerThread = null;
+    private Thread mClientThread = null;
+    private boolean mIsGroupOwner = false;
+    private boolean mWifiP2pEnabled = false;
 
     public static void setGameActivity(Activity activity, Context context)
     {
-        gameActivity = activity;
+        GameActivity = activity;
         gameContext = context;
     }
 
-    public void initial()
+    public void Initial()
     {
         //表示Wi-Fi对等网络状态发生了改变
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -49,25 +51,36 @@ public class WiFiDirect extends BroadcastReceiver implements WifiP2pManager.Chan
         //设备配置信息发生了改变
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        mManager = (WifiP2pManager) gameActivity.getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(gameContext, gameActivity.getMainLooper(), this);
+        mManager = (WifiP2pManager) GameActivity.getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(gameContext, GameActivity.getMainLooper(), this);
+        mReceiver = new WifiDirectReceiver(mManager, mChannel, this);
     }
 
     public void onResume()
     {
-        gameActivity.registerReceiver(this, intentFilter);
+        GameActivity.registerReceiver(mReceiver, intentFilter);
     }
 
-    protected void onPause()
+    public void onPause()
     {
-        gameActivity.unregisterReceiver(this);
+        GameActivity.unregisterReceiver(mReceiver);
+    }
+
+    public void onStop()
+    {
+        Disconnect();
+    }
+
+    public ArrayList<WifiP2pDevice> getArrayList()
+    {
+        return peers;
     }
 
 
     /*
      * 搜索周围wifiDirect设备
      */
-    public void searchNearPeers()
+    public void SearchNearPeers()
     {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener()
         {
@@ -91,8 +104,27 @@ public class WiFiDirect extends BroadcastReceiver implements WifiP2pManager.Chan
         });
     }
 
+    private void CreateGroup()
+    {
+        mManager.createGroup(mChannel, new WifiP2pManager.ActionListener()
+        {
+            @Override
+            public void onSuccess()
+            {
+
+            }
+
+            @Override
+            public void onFailure(int reason)
+            {
+                MLog.d(TAG, "Create group failure. Reason: " + reason);
+            }
+
+        });
+    }
+
     /*
-     * 连接
+     * 连接 （先创建组后才能连接）
      */
     public void Connect(int pos)
     {
@@ -117,6 +149,66 @@ public class WiFiDirect extends BroadcastReceiver implements WifiP2pManager.Chan
         });
     }
 
+    public void Disconnect()
+    {
+        if (mManager != null)
+        {
+            mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener()
+            {
+                @Override
+                public void onSuccess()
+                {
+                }
+
+                @Override
+                public void onFailure(int reason)
+                {
+                    Log.d(TAG, "Remove group failure. Reason: " + reason);
+                }
+            });
+            mManager.cancelConnect(mChannel, null);
+            peers.clear();
+        }
+        else
+        {
+            MLog.e(TAG, "mManager not initial");
+        }
+    }
+
+    public void setIsWifiP2pEnabled(boolean enabled) {
+        mWifiP2pEnabled = enabled;
+    }
+
+    public void setIsGroupOwner(boolean isOwner)
+    {
+        mIsGroupOwner = isOwner;
+    }
+
+    public boolean isGroupOwner()
+    {
+        return mIsGroupOwner;
+    }
+
+    // Create sending threads, return after sending
+    public void createClientThread(String msg)
+    {
+        if (mIsGroupOwner)
+            mClientThread = new ClientThread(msg, CLIENT_PORT);
+        else
+            mClientThread = new ClientThread(msg, SERVER_PORT);
+        new Thread(mClientThread).start();
+    }
+
+    // Create listening threads, always on
+    public void createServerThread()
+    {
+        if (mIsGroupOwner)
+            mServerThread = new ServerThread(this, SERVER_PORT);
+        else
+            mServerThread = new ServerThread(this, CLIENT_PORT);
+        new Thread(mServerThread).start();
+    }
+
 
     @Override
     public void onChannelDisconnected()
@@ -124,62 +216,4 @@ public class WiFiDirect extends BroadcastReceiver implements WifiP2pManager.Chan
         MLog.i(TAG, "Wifi Direct disconnect");
     }
 
-    @Override
-    public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList)
-    {
-        MLog.i(TAG, "Wifi Direct find available peer");
-        peers.clear();
-        peersStr.clear();
-        Collection<WifiP2pDevice> deviceList = wifiP2pDeviceList.getDeviceList();
-        peers.addAll(deviceList);
-        for (int i = 0; i < peers.size(); i++)
-        {
-            peersStr.add(peers.get(i).toString());
-        }
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        String action = intent.getAction();
-        if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))
-        {
-            // Broadcast when Wi-Fi Direct is enabled or disabled on the device.
-            int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED)
-            {
-            }
-            else
-            {
-
-            }
-        }
-        else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))
-        {
-            // 发现周围设备变化 Broadcast when you calldiscoverPeers().
-            // mManagerer.requestPeers(mChannel, new MypeerListListener());
-        }
-        else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
-        {
-            //连接状态已经改变！需要获取IP
-            NetworkInfo device1 = (NetworkInfo) intent.getParcelableExtra("networkInfo");
-            if (device1.isConnected())
-            {
-                MLog.i(TAG, "onReceive: WIFI_P2P_CONNECTION_CHANGED_ACTION  networkInfo.isConnected()");
-                mManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener()
-                {
-                    @Override
-                    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo)
-                    {
-                        final String ip = wifiP2pInfo.groupOwnerAddress.getHostAddress();
-                        MLog.i(TAG, "ip =" + ip);
-                    }
-                });
-            }
-        }
-        else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action))
-        {
-            // Broadcast when a device's details have changed, such as the device's name.
-        }
-    }
 }

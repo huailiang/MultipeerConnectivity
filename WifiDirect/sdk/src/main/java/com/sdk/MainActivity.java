@@ -19,7 +19,6 @@ public class MainActivity extends UnityPlayerActivity
         super.onCreate(savedInstanceState);
         mContext = this;
         direct = new WiFiDirect();
-        initAllSdk();
     }
 
     @Override
@@ -50,11 +49,11 @@ public class MainActivity extends UnityPlayerActivity
         }
     }
 
-    public void initAllSdk()
+    @Override
+    protected void onStop()
     {
-        MLog.d(TAG, "INIT SDK");
-        NativeHelper.setGameActivity(this, mContext);
-        direct.initial();
+        if (direct!=null) direct.onStop();
+        super.onStop();
     }
 
 
