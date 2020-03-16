@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.perfectworld.cfgame"
+      android:versionCode="1"
+      android:versionName="1.0">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:debuggable="false">
+
+        <activity android:name="com.sdk.MainActivity"
+                    android:label="@string/app_name"
+                    android:launchMode="standard"
+                    android:theme="@android:style/Theme.Black.NoTitleBar" 
+                    android:screenOrientation="landscape" 
+                    android:configChanges="keyboardHidden|orientation"
+                    >
+		  <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+        </activity>
+        
+		
+        <activity android:name="com.perfectworld.cfgame.wxapi.WXEntryActivity"
+                  android:exported="true"    
+                  android:screenOrientation="landscape"
+                  android:theme="@android:style/Theme.NoDisplay"	
+            	>
+        </activity>
+               
+
+    </application>
+</manifest>

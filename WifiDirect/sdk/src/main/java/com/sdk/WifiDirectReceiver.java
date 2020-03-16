@@ -11,6 +11,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class WifiDirectReceiver extends BroadcastReceiver implements PeerListListener
@@ -27,7 +28,9 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
         peers = mDirect.getArrayList();
         peers.clear();
         peers.addAll(peerList.getDeviceList());
-//      mDirect.getListAdapter().notifyDataSetChanged();
+
+        // notify msg to unity or main_activity
+        if (mDirect != null) mDirect.onChannelDisconnected();
     }
 
 
@@ -45,7 +48,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
         String action = intent.getAction();
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))
         {
-            // 当设备的Wi-Fi 直连功能打开或关闭时进行广播
+            // 当设备的 WifiDirect 打开或关闭时进行广播
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED)
             {
@@ -67,7 +70,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
         }
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
         {
-            //当设备的Wi-Fi连接信息状态改变时候进行广播
+            // 当设备的Wi-Fi连接信息状态改变时候进行广播
             NetworkInfo netinfo = (NetworkInfo) intent.getParcelableExtra("networkInfo");
             if (netinfo.isConnected())
             {

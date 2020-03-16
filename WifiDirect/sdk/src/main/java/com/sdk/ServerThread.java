@@ -20,7 +20,7 @@ public class ServerThread extends Thread
     private ServerSocket mServerSocket = null;
 
 
-    public ServerThread(WiFiDirect direct, int port)
+    ServerThread(int port)
     {
         this.mPort = port;
     }
@@ -30,7 +30,6 @@ public class ServerThread extends Thread
     {
         try
         {
-            // Create new server socket
             mServerSocket = new ServerSocket();
             mServerSocket.setReuseAddress(true);
             mServerSocket.bind(new InetSocketAddress(mPort));
@@ -88,12 +87,10 @@ public class ServerThread extends Thread
             @Override
             public void run()
             {
-                // Perform game-related processing
-                JSONObject fromClient = null;
+                JSONObject fromClient;
                 try
                 {
                     fromClient = new JSONObject(mFromClient);
-//                    Game curGame = mDirect.getGame();
                     int type = fromClient.getInt("type");
                     if (type == 0)
                     {
@@ -117,7 +114,6 @@ public class ServerThread extends Thread
         });
     }
 
-    // Lets MainActivity stop thread
     public ServerSocket getServerSocket()
     {
         return mServerSocket;
