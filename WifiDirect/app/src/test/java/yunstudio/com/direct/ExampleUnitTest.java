@@ -1,4 +1,4 @@
-package yunstudio.com.myapplication;
+package yunstudio.com.direct;
 
 import org.junit.Test;
 

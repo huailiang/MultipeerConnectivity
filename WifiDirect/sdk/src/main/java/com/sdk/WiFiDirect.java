@@ -8,6 +8,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
+
 import java.util.ArrayList;
 
 
@@ -18,21 +19,19 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     public static Activity GameActivity = null;
     private static Context gameContext = null;
 
-    final int CLIENT_PORT = 8900;
-    final int SERVER_PORT = 8800;
+    private final int CLIENT_PORT = 8900;
+    private final int SERVER_PORT = 8800;
 
     private WifiP2pManager mManager;
     private final IntentFilter intentFilter = new IntentFilter();
     private Channel mChannel;
     private WifiDirectReceiver mReceiver;
-    private ArrayList<WifiP2pDevice> peers = new ArrayList();
+    private ArrayList peers = new ArrayList();
 
-    private Thread mServerThread = null;
-    private Thread mClientThread = null;
     private boolean mIsGroupOwner = false;
     private boolean mWifiP2pEnabled = false;
 
-    public static void setGameActivity(Activity activity, Context context)
+    public WiFiDirect(Activity activity, Context context)
     {
         GameActivity = activity;
         gameContext = context;
@@ -58,20 +57,23 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
 
     public void onResume()
     {
-        GameActivity.registerReceiver(mReceiver, intentFilter);
+        if (GameActivity != null)
+            GameActivity.registerReceiver(mReceiver, intentFilter);
     }
 
     public void onPause()
     {
-        GameActivity.unregisterReceiver(mReceiver);
+        if (GameActivity != null)
+            GameActivity.unregisterReceiver(mReceiver);
     }
 
     public void onStop()
     {
-        Disconnect();
+        if (GameActivity != null)
+            Disconnect();
     }
 
-    public ArrayList<WifiP2pDevice> getArrayList()
+    public ArrayList getArrayList()
     {
         return peers;
     }
@@ -110,7 +112,6 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
             @Override
             public void onSuccess()
             {
-                setIsGroupOwner(true);
             }
 
             @Override
@@ -127,7 +128,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
      */
     public void Connect(int pos)
     {
-        WifiP2pDevice peer = peers.get(pos);
+        WifiP2pDevice peer = (WifiP2pDevice) peers.get(pos);
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = peer.deviceAddress;
         config.wps.setup = 0;
@@ -137,7 +138,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
             @Override
             public void onSuccess()
             {
-                //连接成功
+                MLog.d(TAG, "connect success");
             }
 
             @Override
@@ -152,6 +153,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     {
         if (mManager != null)
         {
+            // 处于Connected状态时可以断开连接
             mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener()
             {
                 @Override
@@ -165,6 +167,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
                     Log.d(TAG, "Remove group failure. Reason: " + reason);
                 }
             });
+            // 处于Invited时可以取消邀请
             mManager.cancelConnect(mChannel, null);
             peers.clear();
         }
@@ -178,17 +181,23 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     {
         if (peers.size() <= 0)
         {
-            MLog.i(TAG,"peers is empty, it will be create new group");
+            MLog.i(TAG, "peers is empty, it will be create new group");
             CreateGroup();
         }
         else
         {
             // notify unity's show peers
-            MLog.i(TAG, "peers count: "+peers.size());
+            MLog.i(TAG, "peers count: " + peers.size());
+            for (int i = 0; i < peers.size(); i++)
+            {
+                WifiP2pDevice item = (WifiP2pDevice) peers.get(i);
+                MLog.d(TAG, "peer" + i + " " + item.deviceName);
+            }
         }
     }
 
-    public void setIsWifiP2pEnabled(boolean enabled) {
+    public void setIsWifiP2pEnabled(boolean enabled)
+    {
         mWifiP2pEnabled = enabled;
     }
 
@@ -205,6 +214,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     // Create sending threads, return after sending
     public void createClientThread(String msg)
     {
+        Thread mClientThread;
         if (mIsGroupOwner)
             mClientThread = new ClientThread(msg, CLIENT_PORT);
         else
@@ -215,6 +225,7 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     // Create listening threads, always on
     public void createServerThread()
     {
+        Thread mServerThread;
         if (mIsGroupOwner)
             mServerThread = new ServerThread(SERVER_PORT);
         else

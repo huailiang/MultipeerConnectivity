@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">WiFi-Direct</string>
     <string name="action_settings">Settings</string>
+    <string name="discover_peers">Discover Peers</string>
+    <string name="play">Play</string>
+    <string name="create_group">Create Group</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="test">Test</string>
 </resources>

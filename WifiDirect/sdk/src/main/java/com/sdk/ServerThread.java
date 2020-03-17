@@ -87,29 +87,7 @@ public class ServerThread extends Thread
             @Override
             public void run()
             {
-                JSONObject fromClient;
-                try
-                {
-                    fromClient = new JSONObject(mFromClient);
-                    int type = fromClient.getInt("type");
-                    if (type == 0)
-                    {
-//                        curGame.tilemap.updateUnit(fromClient.getInt("newX"), fromClient.getInt("newY"),
-//                                fromClient.getInt("prevX"), fromClient.getInt("prevY"));
-                    }
-                    else
-                    {
-//                        curGame.curTurn = fromClient.getInt("turn");
-//                        curGame.displayTurnReady();
-//                        Toast.makeText(mDirect.getApplicationContext(), "Your turn", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                    System.err.println("data send failure");
-                    MLog.d(WiFiDirect.TAG, "Receive coord failure: " + e.toString());
-                }
+               MLog.d(WiFiDirect.TAG, mFromClient);
             }
         });
     }

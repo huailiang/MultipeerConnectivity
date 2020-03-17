@@ -18,7 +18,7 @@ public class MainActivity extends UnityPlayerActivity
     {
         super.onCreate(savedInstanceState);
         mContext = this;
-        direct = new WiFiDirect();
+        direct = new WiFiDirect(this, mContext);
     }
 
     @Override
@@ -56,5 +56,9 @@ public class MainActivity extends UnityPlayerActivity
         super.onStop();
     }
 
+    public WiFiDirect GetWifiDirect()
+    {
+        return direct;
+    }
 
 }

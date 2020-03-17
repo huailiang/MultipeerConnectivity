@@ -20,7 +20,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
     private WifiP2pManager mManager;
     private Channel mChannel;
     private WiFiDirect mDirect;
-    private ArrayList<WifiP2pDevice> peers;
+    private ArrayList peers;
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList)
@@ -30,7 +30,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
         peers.addAll(peerList.getDeviceList());
 
         // notify msg to unity or main_activity
-        if (mDirect != null) mDirect.onChannelDisconnected();
+        if (mDirect != null) mDirect.OnPeersChanged();
     }
 
 
@@ -71,7 +71,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
         {
             // 当设备的Wi-Fi连接信息状态改变时候进行广播
-            NetworkInfo netinfo = (NetworkInfo) intent.getParcelableExtra("networkInfo");
+            NetworkInfo netinfo = intent.getParcelableExtra("networkInfo");
             if (netinfo.isConnected())
             {
                 final PeerListListener listener = this;
@@ -84,7 +84,7 @@ public class WifiDirectReceiver extends BroadcastReceiver implements PeerListLis
                     {
                         // Get group owner IP address
                         String ownerAddr = info.groupOwnerAddress.getHostAddress();
-
+                        MLog.d(WiFiDirect.TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION: "+ownerAddr);
                         mManager.requestPeers(mChannel, listener);
 
                         // Create server and client threads in MainActivity

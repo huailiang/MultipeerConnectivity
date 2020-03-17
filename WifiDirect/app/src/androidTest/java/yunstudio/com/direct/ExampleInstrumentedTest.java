@@ -1,4 +1,4 @@
-package yunstudio.com.myapplication;
+package yunstudio.com.direct;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

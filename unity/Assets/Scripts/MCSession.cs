@@ -21,25 +21,34 @@ public class MCSession
 
     [DllImport("__Internal")]
     static extern void Broadcast(string msg);
-    
+
     [DllImport("__Internal")]
     static extern void QuitConnect();
 
 
-    public static void U3D_InitWith(string name, string type, RoleJoinHandler roleHandler, RecvMessageHandler recvHandler,
-        RoleQuitHandler quitHandler)
+    public static void U3D_InitWith(string name, string type, RoleJoinHandler roleHandler,
+        RecvMessageHandler recvHandler, RoleQuitHandler quitHandler)
     {
+#if UNITY_IOS
         InitWith(name, type, roleHandler, recvHandler, quitHandler);
+#elif UNITY_ANDROID
+        WifiDirect.Initial();
+#endif
     }
 
     public static void U3D_Broadcast(string msg)
     {
+#if UNITY_IOS
         Broadcast(msg);
+#elif UNITY_ANDROID
+        //
+#endif
     }
 
     public static void U3D_Quit()
     {
+#if UNITY_IOS
         QuitConnect();
+#endif
     }
-
 }
