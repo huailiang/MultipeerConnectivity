@@ -20,6 +20,17 @@ public class Entrance : MonoBehaviour
             MCSession.U3D_Quit();
         }
 
+        if (GUI.Button(new Rect(410, 10, 120, 80), "Toast"))
+        {
+            WifiDirect.ShowToast("toast: hello world");
+        }
+
+
+        if (GUI.Button(new Rect(610, 10, 120, 80), "Dial"))
+        {
+            WifiDirect.ShowDialog("dialog: hello world");
+        }
+
         input = GUI.TextField(new Rect(10, 120, 260, 40), input);
         if (GUI.Button(new Rect(280, 120, 80, 40), "Send"))
         {

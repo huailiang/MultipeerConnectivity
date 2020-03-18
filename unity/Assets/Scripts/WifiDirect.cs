@@ -5,12 +5,16 @@ using UnityEngine;
 public class WifiDirect
 {
     private static AndroidJavaClass _unityPlayerClass;
-    
+
     public static AndroidJavaClass UnityPlayerClass
     {
         get
         {
-            return _unityPlayerClass ?? (_unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"));
+            if (_unityPlayerClass==null)
+            {
+                _unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            }
+            return  _unityPlayerClass;
         }
     }
 
@@ -21,8 +25,12 @@ public class WifiDirect
     {
         get
         {
-            return _currentActivity ??
-                   (_currentActivity = UnityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity"));
+            if (_currentActivity==null)
+            {
+                _currentActivity = UnityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+            }
+
+            return _currentActivity;
         }
     }
 
@@ -32,7 +40,11 @@ public class WifiDirect
     {
         get
         {
-            return _wifiDirect ?? (_wifiDirect = CurrentActivity.Call<AndroidJavaObject>("GetWifiDirect"));
+            if (_wifiDirect==null)
+            {
+                _wifiDirect = CurrentActivity.Call<AndroidJavaObject>("GetWifiDirect");
+            }
+            return _wifiDirect;
         }
     }
 
@@ -43,6 +55,21 @@ public class WifiDirect
 
     public static void BroadcastMsg(string msg)
     {
-        AndroidWifiDirect.Call("createClientThread",msg);
+        AndroidWifiDirect.Call("createClientThread", msg);
+    }
+
+    public static void QuitConnect()
+    {
+        AndroidWifiDirect.Call("Disconnect");
+    }
+
+    public static void ShowToast(string msg)
+    {
+        AndroidWifiDirect.Call("ShowToast",msg);
+    }
+
+    public static void ShowDialog(string msg)
+    {
+        AndroidWifiDirect.Call("ShowDialog", msg);
     }
 }

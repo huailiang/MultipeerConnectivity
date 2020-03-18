@@ -41,7 +41,7 @@ public class MCSession
 #if UNITY_IOS
         Broadcast(msg);
 #elif UNITY_ANDROID
-        //
+        WifiDirect.BroadcastMsg(msg);
 #endif
     }
 
@@ -49,6 +49,8 @@ public class MCSession
     {
 #if UNITY_IOS
         QuitConnect();
+#elif UNITY_ANDROID
+        WifiDirect.QuitConnect();
 #endif
     }
 }

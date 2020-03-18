@@ -26,35 +26,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="6dp"
         android:text="@string/discover_peers" />
-
-    <Button
-        android:id="@+id/group_button"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/create_group" />
 
     <Button
         android:id="@+id/disconnect_button"
         style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:text="@string/disconnect" />
 
-    <Button
-        android:id="@+id/play_button"
+    <TextView
+        android:id="@+id/content_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarStyle"
-        android:text="@string/play" />
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="2dp"
+        android:width="340dp"
+        />
 
     </LinearLayout>
 
