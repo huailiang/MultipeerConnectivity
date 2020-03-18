@@ -9,4 +9,10 @@
         android:title="@string/enable_p2p_button"
         app:showAsAction="ifRoom|withText" />
 
+    <item
+        android:id="@+id/atn_direct_discover"
+        android:icon="@drawable/ic_action_discover"
+        android:title="@string/discover_peers"
+        app:showAsAction="ifRoom|withText" />
+
 </menu>

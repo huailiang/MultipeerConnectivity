@@ -21,16 +21,6 @@
         android:gravity="center" >
 
     <Button
-        android:id="@+id/discover_button"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="6dp"
-        android:text="@string/discover_peers" />
-
-    <Button
         android:id="@+id/disconnect_button"
         style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
@@ -48,6 +38,29 @@
         android:width="340dp"
         />
 
+    </LinearLayout>
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" >
+
+        <EditText
+            android:id="@+id/msg_text"
+            android:layout_width="299dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/send_button"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="6dp"
+            android:text="@string/send_peers" />
     </LinearLayout>
 
     <ListView

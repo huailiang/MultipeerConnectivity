@@ -27,15 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
         </activity>
-        
-		
-        <activity android:name="com.perfectworld.cfgame.wxapi.WXEntryActivity"
-                  android:exported="true"    
-                  android:screenOrientation="landscape"
-                  android:theme="@android:style/Theme.NoDisplay"	
-            	>
-        </activity>
-               
 
     </application>
 </manifest>

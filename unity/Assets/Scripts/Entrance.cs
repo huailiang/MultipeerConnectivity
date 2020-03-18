@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using AOT;
-using UnityEngine;
+﻿using UnityEngine;
+using mulitypeer;
+
 
 public class Entrance : MonoBehaviour
 {
@@ -10,58 +9,55 @@ public class Entrance : MonoBehaviour
 
     void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 120, 80), "Connect"))
+        if (GUI.Button(new Rect(10, 10, 140, 80), "Connect"))
         {
             MCSession.U3D_InitWith(SystemInfo.deviceName, "HUAILIANG", OnPeerJoin, OnRecvMessage, OnPeerQuit);
         }
 
-        if (GUI.Button(new Rect(210, 10, 120, 80), "Quit"))
+        if (GUI.Button(new Rect(210, 10, 140, 80), "Quit"))
         {
             MCSession.U3D_Quit();
         }
-
-        if (GUI.Button(new Rect(410, 10, 120, 80), "Toast"))
+#if UNITY_ANDROID
+        if (GUI.Button(new Rect(410, 10, 140, 80), "Discover"))
         {
-            WifiDirect.ShowToast("toast: hello world");
+            WifiDirect.Discover();
         }
 
-
-        if (GUI.Button(new Rect(610, 10, 120, 80), "Dial"))
+        if (GUI.Button(new Rect(610, 10, 140, 80), "Setting"))
         {
-            WifiDirect.ShowDialog("dialog: hello world");
+            WifiDirect.OpenSetting();
         }
+#endif
 
-        input = GUI.TextField(new Rect(10, 120, 260, 40), input);
-        if (GUI.Button(new Rect(280, 120, 80, 40), "Send"))
+        input = GUI.TextField(new Rect(10, 140, 260, 80), input);
+        if (GUI.Button(new Rect(280, 140, 150, 80), "Send"))
         {
             Debug.Log("send msg: " + input);
             MCSession.U3D_Broadcast(input);
             input = string.Empty;
         }
 
-        GUI.Label(new Rect(10, 180, 500, 300), content);
+        GUI.Label(new Rect(10, 240, 500, 300), content);
     }
 
 
-    [MonoPInvokeCallback(typeof(MCSession.RoleJoinHandler))]
-    static void OnPeerJoin(IntPtr ptr)
+    static void OnPeerJoin(string name)
     {
-        string name = Marshal.PtrToStringAnsi(ptr);
+        content += "role join: " + name + "\n";
         Debug.Log("u3d role join with name: " + name);
     }
 
-    [MonoPInvokeCallback(typeof(MCSession.RoleJoinHandler))]
-    static void OnRecvMessage(IntPtr ptr)
+
+    static void OnRecvMessage(string msg)
     {
-        string msg = Marshal.PtrToStringAnsi(ptr);
         Debug.Log("u3d receive message: " + msg);
         content += msg + "\n";
     }
 
-    [MonoPInvokeCallback(typeof(MCSession.RoleJoinHandler))]
-    static void OnPeerQuit(IntPtr ptr)
+    static void OnPeerQuit(string name)
     {
-        string name = Marshal.PtrToStringAnsi(ptr);
         Debug.Log("u3d role quit with name: " + name);
+        content += "role quit:" + name + "\n";
     }
 }

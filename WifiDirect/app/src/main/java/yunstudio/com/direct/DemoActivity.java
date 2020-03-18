@@ -1,20 +1,19 @@
 package yunstudio.com.direct;
 
-import android.content.Intent;
+import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,9 +28,9 @@ import java.util.List;
 public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiInterface
 {
     // ui
-    private Button mDiscoverButton;
-    private Button mDisconnectButton;
-    TextView deviceView;
+    private Button mDisconnectBtn, mSendBtn;
+    private EditText mEditText;
+    private TextView deviceView;
     private ListView mListView;
 
     ArrayAdapter<String> adapter;
@@ -52,15 +51,12 @@ public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiI
 
         mDirect = new WiFiDirect(this, this);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        mEditText = findViewById(R.id.msg_text);
+        mSendBtn = findViewById(R.id.send_button);
+        mSendBtn.setOnClickListener(this::onSendBtnClick);
 
-        mDiscoverButton = findViewById(R.id.discover_button);
-        mDiscoverButton.setOnClickListener(v -> mDirect.SearchNearPeers());
-
-        mDisconnectButton = findViewById(R.id.disconnect_button);
-        mDisconnectButton.setOnClickListener(v -> mDirect.Disconnect());
+        mDisconnectBtn = findViewById(R.id.disconnect_button);
+        mDisconnectBtn.setOnClickListener(v -> mDirect.Disconnect());
 
         deviceView = findViewById(R.id.content_text);
         mListView = findViewById(R.id.peer_list);
@@ -71,6 +67,17 @@ public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiI
         mListView.setOnItemClickListener(this::onItemClick);
 
         mDirect.Initial();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -110,14 +117,10 @@ public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiI
         switch (item.getItemId())
         {
             case R.id.atn_direct_enable:
-                if (mDirect != null)
-                {
-                    startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                }
-                else
-                {
-                    Log.e(TAG, "channel or manager is null");
-                }
+                if (mDirect != null) mDirect.EnableSetting();
+                return true;
+            case R.id.atn_direct_discover:
+                if (mDirect != null) mDirect.SearchNearPeers();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -141,6 +144,20 @@ public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiI
             listViewData.add(device.deviceName + " " + st);
         }
         adapter.notifyDataSetChanged();
+        Toast.makeText(this, "peers count: " + peers.size(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void OnDisconnect()
+    {
+        MLog.d(TAG, "WiFi Direct Disconnect");
+    }
+
+    @Override
+    public void ReciveMsg(String msg)
+    {
+        MLog.d(WiFiDirect.TAG, msg);
+        Toast.makeText(this, "server: " + msg, Toast.LENGTH_SHORT).show();
     }
 
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
@@ -149,6 +166,13 @@ public class DemoActivity extends AppCompatActivity implements WiFiDirect.iWifiI
         MLog.d(TAG, it);
         Toast.makeText(this, it, Toast.LENGTH_SHORT).show();
         mDirect.Connect(arg2);
+    }
+
+    public void onSendBtnClick(View v)
+    {
+        String txt = mEditText.getText().toString();
+        mDirect.createClientThread(txt);
+        mEditText.setText("");
     }
 
 }

@@ -74,14 +74,11 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
         mManager = (WifiP2pManager) GameActivity.getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(gameContext, GameActivity.getMainLooper(), this);
         mReceiver = new WifiDirectReceiver(mManager, mChannel, this);
-        onResume();
     }
 
     public void onResume()
     {
-        MLog.d(TAG, "mReceiver: " + (mReceiver == null) + " " + (GameActivity == null));
-        if (mReceiver != null)
-            GameActivity.registerReceiver(mReceiver, intentFilter);
+        GameActivity.registerReceiver(mReceiver, intentFilter);
     }
 
     public void onPause()
@@ -124,12 +121,9 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
         return device.deviceName + " " + getDeviceStatus(device.status) + " owner:" + device.isGroupOwner();
     }
 
-    /*
-     * 打开wlan设置
-     */
     public void EnableSetting()
     {
-        GameActivity.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+       GameActivity.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
     }
 
     /*
@@ -267,7 +261,6 @@ public class WiFiDirect implements WifiP2pManager.ChannelListener
     // Create sending threads, return after sending
     public void createClientThread(String msg)
     {
-        MLog.d(WiFiDirect.TAG, msg);
         Thread mClientThread;
         if (mIsGroupOwner)
             mClientThread = new ClientThread(msg, this, CLIENT_PORT);

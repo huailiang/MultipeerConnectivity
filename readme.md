@@ -15,7 +15,12 @@
 
 ## Android
 
-	主要是对Wi-Fi Direct的封装, 需要在AndroidMenifest.xml添加如下权限：
+手机运行如图所示：
+<br><img src='image/screen.jpg'><br>
+
+
+
+主要是对Wi-Fi Direct的封装, 需要在AndroidMenifest.xml添加如下权限：
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -24,3 +29,7 @@
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
+
+除了在unity运行版本，我们还支持生成原生应用构建：
+
+<br><img src='image/screen2.jpg'><br>
