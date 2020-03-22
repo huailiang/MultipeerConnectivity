@@ -13,11 +13,13 @@
 
 	MultipeerConnectivity.framework
 
+<br><img src='image/4.jpg'><br>
+
+
 ## Android
 
-手机运行如图所示：
+Unity导出apk, 手机运行如图所示：
 <br><img src='image/screen.jpg'><br>
-
 
 
 主要是对Wi-Fi Direct的封装, 需要在AndroidMenifest.xml添加如下权限：
